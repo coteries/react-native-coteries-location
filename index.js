@@ -1,6 +1,7 @@
 const OriginalReactNative = require("react-native");
 const RNCoteriesLocation = OriginalReactNative.NativeModules.RNCoteriesLocation;
-const LocationEventEmitter = OriginalReactNative.NativeAppEventEmitter;
+const { NativeEventEmitter } = OriginalReactNative
+const LocationEventEmitter = new NativeEventEmitter(RNCoteriesLocation);
 
 var subscriptions = [];
 var updatesEnabled = false;
