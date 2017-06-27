@@ -1,45 +1,20 @@
-const OriginalReactNative = require('react-native');
+const OriginalReactNative = require("react-native");
 const RNCoteriesLocation = OriginalReactNative.NativeModules.RNCoteriesLocation;
 const LocationEventEmitter = OriginalReactNative.NativeAppEventEmitter;
 
 var subscriptions = [];
 var updatesEnabled = false;
 
-type GeoOptions = {
-  timeout: number,
-  maximumAge: number,
-  enableHighAccuracy: boolean,
-  distanceFilter: number
-};
-
 var CoteriesLocation = {
-
-  getCurrentPosition: function(
-    geo_success: Function,
-    geo_error?: Function,
-    geo_options?: GeoOptions
-  ) {
-    // invariant(
-    //   typeof geo_success === "function",
-    //   "Must provide a valid geo_success callback."
-    // );
-    CoteriesLocation.getCurrentPosition(
+  getCurrentPosition: (geo_success, geo_error, geo_options) => {
+    RNCoteriesLocation.getCurrentPosition(
       geo_options || {},
       geo_success,
       geo_error || logError
     );
   },
 
-  getCurrentHeading: function(
-    geo_success: Function,
-    geo_error?: Function,
-    geo_options?: GeoOptions
-  ) {
-    // invariant(
-    //   typeof geo_success === "function",
-    //   "Must provide a valid geo_success callback."
-    // );
-
+  getCurrentHeading: (geo_success, geo_error, geo_options) => {
     RNCoteriesLocation.getCurrentHeading(
       geo_options || {},
       geo_success,
@@ -47,11 +22,7 @@ var CoteriesLocation = {
     );
   },
 
-  watchPosition: function(
-    success: Function,
-    error?: Function,
-    options?: GeoOptions
-  ): number {
+  watchPosition: (success, error, options) => {
     if (!updatesEnabled) {
       RNCoteriesLocation.startObserving(options || {});
       updatesEnabled = true;
@@ -64,11 +35,7 @@ var CoteriesLocation = {
     return watchID;
   },
 
-  watchHeading: function(
-    success: Function,
-    error?: Function,
-    options?: GeoOptions
-  ): number {
+  watchHeading: (success, error, options) => {
     if (!updatesEnabled) {
       RNCoteriesLocation.startObserving(options || {});
       updatesEnabled = true;
@@ -81,7 +48,7 @@ var CoteriesLocation = {
     return watchID;
   },
 
-  clearWatch: function(watchID: number) {
+  clearWatch: (watchID) => {
     var sub = subscriptions[watchID];
     if (!sub) {
       // Silently exit when the watchID is invalid or already cleared
@@ -105,7 +72,7 @@ var CoteriesLocation = {
     }
   },
 
-  stopObserving: function() {
+  stopObserving: () => {
     if (updatesEnabled) {
       CoteriesLocation.stopObserving();
       updatesEnabled = false;
