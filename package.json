@@ -7,8 +7,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "react-native": "^0.47.0"
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
   },
   "description": ""
 }
