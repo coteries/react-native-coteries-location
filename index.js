@@ -75,7 +75,7 @@ var CoteriesLocation = {
 
   stopObserving: () => {
     if (updatesEnabled) {
-      CoteriesLocation.stopObserving();
+      RNCoteriesLocation.stopObserving();
       updatesEnabled = false;
       for (var ii = 0; ii < subscriptions.length; ii++) {
         var sub = subscriptions[ii];
