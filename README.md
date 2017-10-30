@@ -1,0 +1,1 @@
+Clone of react-native geolocalisation, with heading throttled
