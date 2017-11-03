@@ -24,7 +24,7 @@ public class RNALocationModule extends ReactContextBaseJavaModule{
     private LocationManager mLocationManager;
     private Location mLastLocation; // Save last Location Provided
 
-    private static final int LOCATION_INTERVAL = 1000;
+    private static final int LOCATION_INTERVAL = 1000 * 60;
     private static final float LOCATION_DISTANCE = 10f;
 
     //The React Native Context
@@ -99,6 +99,11 @@ public class RNALocationModule extends ReactContextBaseJavaModule{
                 e.printStackTrace();
                 Log.i(TAG, "Location services disconnected.");
             }
+        } else {
+            WritableMap params = Arguments.createMap();
+            params.putDouble("Longitude", 0);
+            params.putDouble("Latitude", 0);
+            sendEvent(mReactContext, "getCurrentPosition", params);
         }
     }
 
