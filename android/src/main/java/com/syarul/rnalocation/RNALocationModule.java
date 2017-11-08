@@ -41,16 +41,6 @@ public class RNALocationModule extends ReactContextBaseJavaModule{
 
     }
 
-    private void initLastLocation() {
-        if (mLocationManager != null) {
-            try {
-                mLastLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            } catch (Exception ex) {
-                Log.i(TAG, "Failed to get Location Service", ex);
-            }
-        }
-    }
-
     public void destroy()
     {
         Log.e(TAG, "destroy");
@@ -81,10 +71,12 @@ public class RNALocationModule extends ReactContextBaseJavaModule{
             try {
                 double Longitude;
                 double Latitude;
+                double Bearing;
 
                 // Receive Longitude / Latitude from (updated) Last Location
                 Longitude = mLastLocation.getLongitude();
                 Latitude = mLastLocation.getLatitude();
+
 
                 Log.i(TAG, "Got new location. Lng: " +Longitude+" Lat: "+Latitude);
 
@@ -109,7 +101,7 @@ public class RNALocationModule extends ReactContextBaseJavaModule{
 
     @ReactMethod
     public void watchPosition() {
-        initLastLocation();
+        getLocation();
         try {
             mLocationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
@@ -128,7 +120,35 @@ public class RNALocationModule extends ReactContextBaseJavaModule{
         } catch (IllegalArgumentException ex) {
             Log.d(TAG, "gps provider does not exist " + ex.getMessage());
         }
+    }
 
+    @ReactMethod
+    public void watchHeading() {
+        initLastLocation();
+        if (mLastLocation != null) {
+            try {
+                double Bearing;
+                Bearing = mLastLocation.getBearing();
+                WritableMap params = Arguments.createMap();
+                params.putDouble("Bearing", Bearing);
+                sendEvent(mReactContext, "headingDidChange", params);
+
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                Log.i(TAG, "Location services disconnected.");
+            }
+        }
+    }
+
+    private void initLastLocation() {
+        if (mLocationManager != null) {
+            try {
+                mLastLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            } catch (Exception ex) {
+                Log.i(TAG, "Failed to get Location Service", ex);
+            }
+        }
     }
 
     private class LocationListener implements android.location.LocationListener {
@@ -158,7 +178,7 @@ public class RNALocationModule extends ReactContextBaseJavaModule{
             params.putDouble("Latitude", Latitude);
 
             // Send Event to JS to update Location
-            sendEvent(mReactContext, "geolocationDidChange", params);
+            sendEvent(mReactContext, "getCurrentPosition", params);
         }
 
         @Override

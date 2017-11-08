@@ -58,7 +58,7 @@ var CoteriesLocation = {
     } else {
       if (!updatesEnabled) {
         updatesEnabled = true
-        DeviceEventEmitter.addListener('geolocationDidChange', (e) => {
+        DeviceEventEmitter.addListener('getCurrentPosition', (e) => {
           geoSuccess({ coords: { longitude: e.Longitude, latitude: e.Latitude } })
         })
         RNALocation.watchPosition()
