@@ -42,6 +42,7 @@ var CoteriesLocation = {
   },
 
   watchPosition: (geoSuccess, error, options) => {
+    console.log('RNALocation watchPosition')
     if (isIOS) {
       if (!updatesEnabled) {
         RNCoteriesLocation.startObserving(options || {})
@@ -60,6 +61,7 @@ var CoteriesLocation = {
         DeviceEventEmitter.addListener('geolocationDidChange', (e) => {
           geoSuccess({ coords: { longitude: e.Longitude, latitude: e.Latitude } })
         })
+        RNALocation.watchPosition()
       }
     }
   },
@@ -76,6 +78,12 @@ var CoteriesLocation = {
         error ? LocationEventEmitter.addListener('geolocationError', error) : null
       ])
       return watchID
+    } else {
+      if (!updatesEnabled) {
+        updatesEnabled = true
+        DeviceEventEmitter.addListener('headingDidChange', success, error)
+        RNALocation.watchHeading()
+      }
     }
   },
 
