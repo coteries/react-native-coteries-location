@@ -144,7 +144,11 @@ public class RNALocationModule extends ReactContextBaseJavaModule{
     private void initLastLocation() {
         if (mLocationManager != null) {
             try {
-                mLastLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Location lastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                if(lastKnownLocation != null) {
+                    mLastLocation = lastKnownLocation;
+                }
             } catch (Exception ex) {
                 Log.i(TAG, "Failed to get Location Service", ex);
             }
